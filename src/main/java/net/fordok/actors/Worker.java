@@ -1,11 +1,14 @@
 package net.fordok.actors;
 
+import akka.actor.ActorRef;
 import akka.actor.Cancellable;
+import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import net.fordok.configuration.ConfigurationWorker;
 import net.fordok.messages.CommandsManage;
+import net.fordok.messages.WorkResult;
 import net.fordok.work.Work;
 import scala.concurrent.duration.Duration;
 
@@ -21,7 +24,6 @@ public class Worker extends UntypedActor {
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     private Cancellable scheduler = null;
     private ConfigurationWorker conf = null;
-    private Work work;
 
     private int id;
 
@@ -42,16 +44,16 @@ public class Worker extends UntypedActor {
             } else {
                 scheduler = initSchedulerWithPeriod(conf.getPeriod());
             }
+        } else if (message instanceof WorkResult) {
+            conf.getStatsActor().tell(message, getSelf());
         } else if (message.equals("Tick")) {
             doWork();
         }
     }
 
     private void doWork() {
-        long start = System.currentTimeMillis();
-        conf.getWork().doWork();
-        long lag = System.currentTimeMillis() - start;
-        conf.getStatsActor().tell(lag, getSelf());
+        ActorRef executor = getContext().actorOf(Props.create(WorkerExecutor.class));
+        executor.tell(conf.getWork(), getSelf());
     }
 
     private Cancellable initSchedulerWithPeriod(long period) {

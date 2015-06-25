@@ -1,5 +1,6 @@
 package net.fordok.work;
 
+import net.fordok.messages.WorkResult;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
@@ -42,14 +43,19 @@ public class HttpWork implements Work {
     }
 
     @Override
-    public void doWork() {
+    public WorkResult doWork() {
         HttpClient client = new HttpClient();
         HttpMethod method = new HeadMethod(url);
+        WorkResult result = new WorkResult();
+        result.setName(name);
         try {
+            result.setStartTs(System.currentTimeMillis());
             int responseCode = client.executeMethod(method);
+            result.setEndTs(System.currentTimeMillis());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     @Override

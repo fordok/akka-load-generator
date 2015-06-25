@@ -3,9 +3,7 @@ package net.fordok.actors;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.fordok.messages.WorkResult;
 
 /**
  * User: Fordok
@@ -15,13 +13,12 @@ import java.util.List;
 public class StatsAggregator extends UntypedActor {
 
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    private List<Long> lags = new ArrayList<Long>();
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof Long) {
-            lags.add((Long)message);
-            log.info("Received lag : " + message.toString());
+        if (message instanceof WorkResult) {
+            WorkResult result = (WorkResult)message;
+            log.info("Received : " + (WorkResult)message + " lag : " + (result.getEndTs() - result.getStartTs()));
         }
     }
 }
