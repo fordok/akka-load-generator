@@ -13,6 +13,14 @@ public class WorkResult implements Serializable {
     private String name;
     private long startTs;
     private long endTs;
+    private String error = "";
+
+    private int responseCode;
+    private String responseBody = "";
+
+    public WorkResult(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -38,12 +46,39 @@ public class WorkResult implements Serializable {
         this.endTs = endTs;
     }
 
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseBody() {
+        return responseBody;
+    }
+
+    public void setResponseBody(String responseBody) {
+        this.responseBody = responseBody;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     @Override
     public String toString() {
         return "WorkResult{" +
                 "name='" + name + '\'' +
                 ", startTs=" + startTs +
                 ", endTs=" + endTs +
+                ", error='" + error + '\'' +
+                ", responseCode=" + responseCode +
+                ", responseBody=" + responseBody +
                 '}';
     }
 }

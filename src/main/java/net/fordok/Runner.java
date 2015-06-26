@@ -13,10 +13,10 @@ import net.fordok.work.HttpWork;
 public class Runner {
     public static void main(String[] args) throws InterruptedException {
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
-        loadGenerator.init(new ConfigurationSystem(10, 500, 100, new HttpWork("HttpWork", "http://google.com")));
+        loadGenerator.init(new ConfigurationSystem(10, 1000, 100, new HttpWork("HttpWork", "http://locdfalhost:8080", "POST")));
         loadGenerator.start();
 
-        Thread.sleep(10000);
+        Thread.sleep(5000);
 
         loadGenerator.stop();
     }

@@ -1,13 +1,12 @@
 package net.fordok.work;
 
 import net.fordok.messages.WorkResult;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * User: Fordok
@@ -20,10 +19,12 @@ public class HttpWork implements Work {
 
     private String name;
     private String url;
+    private String method;
 
-    public HttpWork(String name, String url) {
+    public HttpWork(String name, String url, String method) {
         this.name = name;
         this.url = url;
+        this.method = method;
     }
 
     public String getName() {
@@ -42,18 +43,28 @@ public class HttpWork implements Work {
         this.url = url;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     @Override
     public WorkResult doWork() {
-        HttpClient client = new HttpClient();
-        HttpMethod method = new HeadMethod(url);
-        WorkResult result = new WorkResult();
-        result.setName(name);
+        WorkResult result = new WorkResult(name);
         try {
             result.setStartTs(System.currentTimeMillis());
-            int responseCode = client.executeMethod(method);
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod(method);
+            int responseCode = con.getResponseCode();
+            result.setResponseCode(responseCode);
             result.setEndTs(System.currentTimeMillis());
         } catch (IOException e) {
-            e.printStackTrace();
+            result.setError(e.getMessage());
+            result.setEndTs(System.currentTimeMillis());
         }
         return result;
     }

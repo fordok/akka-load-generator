@@ -10,14 +10,14 @@ import net.fordok.work.Work;
  */
 public class ConfigurationSystem {
 
-    public static final ConfigurationSystem DEFAULT = new ConfigurationSystem(1, 100, 100, new HttpWork("http work", "http://google.com"));
+    public static final ConfigurationSystem DEFAULT = new ConfigurationSystem(1, 100, 100, new HttpWork("http work", "http://google.com", "POST"));
 
     private int workersCount;
-    private long period;
-    private long rampUp;
+    private int period;
+    private int rampUp;
     private Work work;
 
-    public ConfigurationSystem(int workersCount, long period, long rampUp, Work work) {
+    public ConfigurationSystem(int workersCount, int period, int rampUp, Work work) {
         this.workersCount = workersCount;
         this.period = period;
         this.rampUp = rampUp;
@@ -32,19 +32,19 @@ public class ConfigurationSystem {
         this.workersCount = workersCount;
     }
 
-    public long getPeriod() {
+    public int getPeriod() {
         return period;
     }
 
-    public void setPeriod(long period) {
+    public void setPeriod(int period) {
         this.period = period;
     }
 
-    public long getRampUp() {
+    public int getRampUp() {
         return rampUp;
     }
 
-    public void setRampUp(long rampUp) {
+    public void setRampUp(int rampUp) {
         this.rampUp = rampUp;
     }
 
