@@ -9,7 +9,6 @@ import akka.event.LoggingAdapter;
 import net.fordok.configuration.ConfigurationWorker;
 import net.fordok.messages.CommandsManage;
 import net.fordok.messages.WorkResult;
-import net.fordok.work.Work;
 import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
@@ -36,7 +35,7 @@ public class Worker extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof ConfigurationWorker) {
-            conf = (ConfigurationWorker)message;
+            conf = (ConfigurationWorker) message;
             log.info("Worker with id : " + id + " received configuration : " + conf);
         } else if (message instanceof CommandsManage.Start) {
             if (conf == null) {
@@ -44,6 +43,10 @@ public class Worker extends UntypedActor {
             } else {
                 scheduler = initSchedulerWithPeriod(conf.getPeriod());
             }
+        } else if (message instanceof CommandsManage.Suspend) {
+            scheduler.cancel();
+        } else if (message instanceof CommandsManage.Resume) {
+            scheduler = initSchedulerWithPeriod(conf.getPeriod());
         } else if (message instanceof WorkResult) {
             conf.getStatsActor().tell(message, getSelf());
         } else if (message.equals("Tick")) {

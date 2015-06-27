@@ -39,9 +39,9 @@ public class Master extends UntypedActor {
                 ConfigurationWorker confWorker = new ConfigurationWorker(conf.getPeriod(), conf.getWork(), stats);
                 workers.add(getContext().system().actorOf(Props.create(Worker.class, i, confWorker)));
             }
-        } else if (message instanceof CommandsManage.Start) {
+        } else if (message instanceof CommandsManage) {
             for (ActorRef worker : workers) {
-                worker.tell(new CommandsManage.Start(), ActorRef.noSender());
+                worker.tell(message, getSelf());
             }
         }
     }
