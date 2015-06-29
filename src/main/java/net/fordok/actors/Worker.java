@@ -1,16 +1,15 @@
 package net.fordok.actors;
 
-import akka.actor.ActorRef;
-import akka.actor.Cancellable;
-import akka.actor.Props;
-import akka.actor.UntypedActor;
+import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import akka.japi.Function;
 import net.fordok.configuration.ConfigurationWorker;
 import net.fordok.messages.CommandsManage;
 import net.fordok.messages.WorkResult;
 import scala.concurrent.duration.Duration;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -65,4 +64,22 @@ public class Worker extends UntypedActor {
                 getContext().system().dispatcher(), null);
     }
 
+    private static SupervisorStrategy strategy = new OneForOneStrategy(10,
+            Duration.create("1 minute"),
+            new Function<Throwable, SupervisorStrategy.Directive>() {
+                @Override
+                public SupervisorStrategy.Directive apply(Throwable t) {
+                    if (t instanceof IOException) {
+                        return SupervisorStrategy.stop();
+                    } else {
+                        return SupervisorStrategy.escalate();
+                    }
+                }
+            }
+    );
+
+    @Override
+    public SupervisorStrategy supervisorStrategy() {
+        return strategy;
+    }
 }
