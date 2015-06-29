@@ -43,6 +43,9 @@ public class Master extends UntypedActor {
             for (ActorRef worker : workers) {
                 worker.tell(message, getSelf());
             }
+            if (message instanceof CommandsManage.Stop) {
+                workers.clear();
+            }
         }
     }
 }
