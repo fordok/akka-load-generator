@@ -1,0 +1,7 @@
+workersCount: 10
+period: 500
+rampUp: 100
+work:
+  name: HttpWork
+  url: http://google.com
+  method: GET
