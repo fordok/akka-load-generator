@@ -26,7 +26,7 @@ public class Master extends UntypedActor {
 
     @Override
     public void preStart() throws Exception {
-        stats = getContext().system().actorOf(Props.create(StatsAggregator.class));
+        stats = getContext().actorOf(Props.create(StatsAggregator.class));
     }
 
     @Override
