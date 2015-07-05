@@ -37,7 +37,7 @@ public class Master extends UntypedActor {
             workers.clear();
             for (int i = 1; i <= conf.getWorkersCount(); i++) {
                 ConfigurationWorker confWorker = new ConfigurationWorker(conf.getPeriod(), conf.getWork(), stats);
-                workers.add(getContext().system().actorOf(Props.create(Worker.class, i, confWorker)));
+                workers.add(getContext().actorOf(Props.create(Worker.class, i, confWorker)));
             }
         } else if (message instanceof CommandsManage) {
             for (ActorRef worker : workers) {

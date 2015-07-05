@@ -36,7 +36,6 @@ public class LoadGeneratorImpl implements LoadGenerator {
     public void stop() {
         master.tell(new CommandsManage.Stop(), ActorRef.noSender());
         master.tell(PoisonPill.getInstance(), ActorRef.noSender());
-        actorSystem.shutdown();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class LoadGeneratorImpl implements LoadGenerator {
 
     @Override
     public void resume() {
-        master.tell(new CommandsManage.Suspend(), ActorRef.noSender());
+        master.tell(new CommandsManage.Resume(), ActorRef.noSender());
     }
 
     @Override
