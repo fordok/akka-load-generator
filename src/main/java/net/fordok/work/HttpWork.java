@@ -21,6 +21,8 @@ public class HttpWork implements Work {
     private String url;
     private String method;
 
+    public HttpWork() {}
+
     public HttpWork(String name, String url, String method) {
         this.name = name;
         this.url = url;

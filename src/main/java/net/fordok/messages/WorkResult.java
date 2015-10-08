@@ -18,6 +18,8 @@ public class WorkResult implements Serializable {
     private int responseCode;
     private String responseBody = "";
 
+    public WorkResult(){}
+
     public WorkResult(String name) {
         this.name = name;
     }

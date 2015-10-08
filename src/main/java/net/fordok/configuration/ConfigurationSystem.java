@@ -17,6 +17,8 @@ public class ConfigurationSystem {
     private int rampUp;
     private Work work;
 
+    public ConfigurationSystem() {}
+
     public ConfigurationSystem(int workersCount, int period, int rampUp, Work work) {
         this.workersCount = workersCount;
         this.period = period;
