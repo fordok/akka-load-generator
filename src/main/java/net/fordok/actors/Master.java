@@ -1,6 +1,7 @@
 package net.fordok.actors;
 
 import akka.actor.ActorRef;
+import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
@@ -44,6 +45,9 @@ public class Master extends UntypedActor {
                 worker.tell(message, getSelf());
             }
             if (message instanceof CommandsManage.Stop) {
+                for (ActorRef worker : workers) {
+                    worker.tell(PoisonPill.getInstance(), getSelf());
+                }
                 workers.clear();
             }
         }

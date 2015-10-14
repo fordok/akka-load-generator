@@ -2,7 +2,6 @@ package net.fordok.core;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.PoisonPill;
 import akka.actor.Props;
 import net.fordok.actors.Master;
 import net.fordok.configuration.ConfigurationSystem;
@@ -35,7 +34,6 @@ public class LoadGeneratorImpl implements LoadGenerator {
     @Override
     public void stop() {
         master.tell(new CommandsManage.Stop(), ActorRef.noSender());
-        master.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
 
     @Override
