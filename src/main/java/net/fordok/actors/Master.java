@@ -35,7 +35,7 @@ public class Master extends UntypedActor {
         log.info("Received : " + message);
         if (message instanceof ConfigurationSystem) {
             conf = (ConfigurationSystem)message;
-            workers.clear();
+            killAndClearWorkers();
             for (int i = 1; i <= conf.getWorkersCount(); i++) {
                 ConfigurationWorker confWorker = new ConfigurationWorker(conf.getPeriod(), conf.getWork(), stats);
                 workers.add(getContext().actorOf(Props.create(Worker.class, i, confWorker)));
@@ -45,11 +45,15 @@ public class Master extends UntypedActor {
                 worker.tell(message, getSelf());
             }
             if (message instanceof CommandsManage.Stop) {
-                for (ActorRef worker : workers) {
-                    worker.tell(PoisonPill.getInstance(), getSelf());
-                }
-                workers.clear();
+                killAndClearWorkers();
             }
         }
+    }
+
+    private void killAndClearWorkers() {
+        for (ActorRef worker : workers) {
+            worker.tell(PoisonPill.getInstance(), getSelf());
+        }
+        workers.clear();
     }
 }
