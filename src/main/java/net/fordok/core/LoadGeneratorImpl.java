@@ -16,44 +16,21 @@ public class LoadGeneratorImpl implements LoadGenerator {
 
     private ActorSystem actorSystem;
     private ActorRef master;
-    private ConfigurationSystem confSystem = ConfigurationSystem.DEFAULT;
 
     @Override
-    public void init(ConfigurationSystem confSystem) {
+    public void init() {
         actorSystem = ActorSystem.create("loadGenerator");
         master = actorSystem.actorOf(Props.create(Master.class));
-        master.tell(confSystem, ActorRef.noSender());
-        this.confSystem = confSystem;
     }
 
     @Override
-    public void start() {
+    public void start(ConfigurationSystem confSystem) {
+        master.tell(confSystem, ActorRef.noSender());
         master.tell(new CommandsManage.Start(), ActorRef.noSender());
     }
 
     @Override
     public void stop() {
         master.tell(new CommandsManage.Stop(), ActorRef.noSender());
-    }
-
-    @Override
-    public void suspend() {
-        master.tell(new CommandsManage.Suspend(), ActorRef.noSender());
-    }
-
-    @Override
-    public void resume() {
-        master.tell(new CommandsManage.Resume(), ActorRef.noSender());
-    }
-
-    @Override
-    public void setConfiguration(ConfigurationSystem confSystem) {
-        this.confSystem = confSystem;
-        master.tell(confSystem, ActorRef.noSender());
-    }
-
-    @Override
-    public ConfigurationSystem getConfiguration() {
-        return confSystem;
     }
 }

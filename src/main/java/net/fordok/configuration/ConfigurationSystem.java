@@ -1,6 +1,5 @@
 package net.fordok.configuration;
 
-import net.fordok.work.HttpWork;
 import net.fordok.work.Work;
 
 /**
@@ -9,8 +8,6 @@ import net.fordok.work.Work;
  * Time: 2:53 PM
  */
 public class ConfigurationSystem {
-
-    public static final ConfigurationSystem DEFAULT = new ConfigurationSystem(1, 100, 100, new HttpWork("http work", "http://google.com", "POST"));
 
     private int workersCount;
     private int period;

@@ -47,6 +47,7 @@ public class Worker extends UntypedActor {
         } else if (message instanceof CommandsManage.Resume) {
             scheduler = initSchedulerWithPeriod(conf.getPeriod());
         } else if (message instanceof WorkResult) {
+            getSender().tell(PoisonPill.getInstance(), getSelf());
             conf.getStatsActor().tell(message, getSelf());
         } else if (message.equals("Tick")) {
             doWork();

@@ -4,7 +4,9 @@ import net.fordok.configuration.ConfigurationSystem;
 import net.fordok.core.LoadGenerator;
 import net.fordok.core.LoadGeneratorImpl;
 import net.fordok.work.HttpWork;
-import org.yaml.snakeyaml.Yaml;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Fordok
@@ -13,13 +15,15 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class Runner {
     public static void main(String[] args) throws InterruptedException {
-
-        Yaml yaml = new Yaml();
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
-        loadGenerator.init(new ConfigurationSystem(10, 1000, 100, new HttpWork("HttpWork", "http://google.com", "GET")));
-        loadGenerator.start();
+        Map<String, String> inputParams = new HashMap<>();
+        inputParams.put("url", "http://google.com");
+        inputParams.put("method", "GET");
 
-        Thread.sleep(5000);
+        loadGenerator.init();
+        loadGenerator.start(new ConfigurationSystem(10, 1000, 100, new HttpWork(inputParams)));
+
+        Thread.sleep(30000);
 
         loadGenerator.stop();
     }

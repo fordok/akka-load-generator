@@ -1,6 +1,7 @@
 package net.fordok.messages;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * User: fordok
@@ -14,9 +15,7 @@ public class WorkResult implements Serializable {
     private long startTs;
     private long endTs;
     private String error = "";
-
-    private int responseCode;
-    private String responseBody = "";
+    private Map<String,String> output;
 
     public WorkResult(){}
 
@@ -48,22 +47,6 @@ public class WorkResult implements Serializable {
         this.endTs = endTs;
     }
 
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseBody() {
-        return responseBody;
-    }
-
-    public void setResponseBody(String responseBody) {
-        this.responseBody = responseBody;
-    }
-
     public String getError() {
         return error;
     }
@@ -72,15 +55,20 @@ public class WorkResult implements Serializable {
         this.error = error;
     }
 
+    public Map<String, String> getOutput() {
+        return output;
+    }
+
+    public void setOutput(Map<String, String> output) {
+        this.output = output;
+    }
+
     @Override
     public String toString() {
         return "WorkResult{" +
                 "name='" + name + '\'' +
-                ", startTs=" + startTs +
-                ", endTs=" + endTs +
                 ", error='" + error + '\'' +
-                ", responseCode=" + responseCode +
-                ", responseBody=" + responseBody +
+                ", output=" + output +
                 '}';
     }
 }

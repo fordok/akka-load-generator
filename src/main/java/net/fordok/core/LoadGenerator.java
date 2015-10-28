@@ -8,11 +8,7 @@ import net.fordok.configuration.ConfigurationSystem;
  * Time: 4:18 PM
  */
 public interface LoadGenerator {
-    void init(ConfigurationSystem confSystem);
-    void start();
+    void init();
+    void start(ConfigurationSystem confSystem);
     void stop();
-    void suspend();
-    void resume();
-    void setConfiguration(ConfigurationSystem confSystem);
-    ConfigurationSystem getConfiguration();
 }

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Fordok
@@ -17,65 +19,30 @@ public class HttpWork implements Work {
 
     private static Logger log = LoggerFactory.getLogger(HttpWork.class);
 
-    private String name;
-    private String url;
-    private String method;
+    private final Map<String, String> inputParams;
 
-    public HttpWork() {}
-
-    public HttpWork(String name, String url, String method) {
-        this.name = name;
-        this.url = url;
-        this.method = method;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
+    public HttpWork(Map<String, String> inputParams) {
+        this.inputParams = inputParams;
     }
 
     @Override
     public WorkResult doWork() {
-        WorkResult result = new WorkResult(name);
+        WorkResult result = new WorkResult(this.getClass().getSimpleName());
         try {
             result.setStartTs(System.currentTimeMillis());
-            URL obj = new URL(url);
+            URL obj = new URL(inputParams.get("url"));
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod(method);
+            con.setRequestMethod(inputParams.get("method"));
             int responseCode = con.getResponseCode();
-            result.setResponseCode(responseCode);
+            Map<String,String> output = new HashMap<String,String>();
+            output.put("code", String.valueOf(responseCode));
+            result.setOutput(output);
             result.setEndTs(System.currentTimeMillis());
         } catch (IOException e) {
-            result.setError(e.getMessage());
+            result.setError(e.getClass() + " - " + e.getMessage());
             result.setEndTs(System.currentTimeMillis());
         }
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "HttpWork{" +
-                "name='" + HttpWork.class.getCanonicalName() + '\'' +
-                "url='" + url + '\'' +
-                '}';
-    }
 }
